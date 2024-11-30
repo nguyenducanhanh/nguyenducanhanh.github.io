@@ -1,237 +1,135 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>hi hi  </title>
-    <style type="text/css">
-                p {
-                    margin: 0;
-                }
-    
-                *, *::before, *::after {
-                    box-sizing: border-box;
-                }
-    
-                .overlay, .scare {
-                    position: fixed;
-    
-                    top: 0;
-                    left: 0;
-    
-                    height: 100vh;
-                    width: 100vw;
-                }
-    
-                p.overlay-title {
-                    font-size: 24px;
-                    font-weight: 900;
-                    color: black;
-                    line-height: 1;
-    
-                    margin-bottom: 16px;
-                }
-    
-                .overlay-button {
-                    display: inline-flex;
-                    align-items: center;
-    
-                    height: 40px;
-    
-                    padding-right: 24px;
-                    padding-left: 24px;
-    
-                    font-size: 16px;
-                    font-weight: 500;
-                    line-height: 1;
-    
-                    border-radius: 4px;
-    
-                    margin: 4px;
-    
-                    cursor: pointer;
-                }
-    
-                .overlay-buttons-wrapper {
-                    margin: 24px -8px -8px;
-                }
-    
-                #accept-button {
-                    background-color: rgb(132, 94, 194);
-    
-                    color: white;
-                }
-    
-                #decline-button {
-                    color: rgb(132, 94, 194);
-    
-                    border: 2px solid rgb(132, 94, 194);
-                }
-    
-                p.overlay-description {
-                    font-size: 16px;
-                    font-weight: 400;
-                    color: rgba(0, 0, 0, 0.5);
-                    line-height: 1.25;
-    
-                    margin-bottom: 16px;
-                }
-    
-                a.overlay-link {
-                    display: inline-block;
-    
-                    text-decoration: none;
-    
-                    font-size: 16px;
-                    font-weight: 500;
-                    color: rgb(132, 94, 194);
-                    line-height: 1;
-    
-                    position: relative;
-    
-                    margin-top: 16px;
-                }
-    
-                a.overlay-link::before {
-                    position: absolute;
-    
-                    content: "";
-    
-                    height: calc(50% + 4px);
-                    width: calc(100% + 8px);
-    
-                    bottom: -4px;
-                    left: -4px;
-    
-                    background-color: rgba(132, 94, 194, 0.1);
-                }
-    
-                .overlay-body {
-                    max-width: 512px;
-    
-                    text-align: center;
-    
-                    font-family: "Inter", sans-serif;
-                }
-    
-                .overlay[hidden] {
-                    display: none;
-                }
-    
-                .overlay {
-                    z-index: 2;
-    
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-    
-                    background-color: #f5f6fa;
-    
-                    padding-right: 24px;
-                    padding-left: 24px;
-                }
-    
-                .scare {
-                    z-index: 1;
-                }
-    
-                video#video {
-                    height: 100%;
-                    width: 100%;
-    
-                    object-fit: cover;
-                }
-    
-                video#video::-webkit-media-controls-enclosure {
-                    display:none !important;
-                }
-     </style>
-
-     
-    </head>
-    <body>
-    <div id="overlay" class="overlay">
-    <div class="overlay-body">
-    <p class="overlay-title"></p>
-    <p>THIS CONTENT MAY BE INAPPROPRIATE</p>
-    <br>
-    <br>
-   
-</p>
-<p>You should note that this content is not for the elderly, children, under 18 years old, people in bad mood, weak heart, have underlying diseases, or unstable mentality!</p>
-    <div class="overlay-buttons-wrapper">
-    <div id="accept-button" class="overlay-button"> Accept </div>
-    <div id="decline-button" class="overlay-button"> Decline </div>
-    </div>
-    <a href="#" target="_blank" class="overlay-link">Privacy policy</a>
-    </div>
-    </div>
-    <div class="scare">
-    <video id="video" class="video" src="video.mp4" loop></video>
-    </div>
-    <script type="text/javascript">
-                const video = document.getElementById("video");
-                const overlay = document.getElementById("overlay");
-                const declineButton = document.getElementById("decline-button");
-                const acceptButton = document.getElementById("accept-button");
-    
-                let hasClicked;
-    
-                window.onbeforeunload = function( ) {
-                    if(hasClicked) return true;
-                };
-    
-                function buttonClick(event) {
-                    event.preventDefault();
-                    if(!hasClicked) hasClicked = true;
-                    overlay.hidden = true;
-                    video.play();
-                    videoClick();
-                }
-    
-                function videoClick(event) {
-                    if(event) event.preventDefault();
-                    // if not fullscreen
-                    const { documentElement } = document;
-                    if(documentElement.requestFullscreen) documentElement.requestFullscreen();
-                    else if(documentElement.mozRequestFullScreen) documentElement.mozRequestFullScreen();
-                    else if(documentElement.webkitRequestFullscreen) documentElement.webkitRequestFullscreen();
-                    else if(documentElement.msRequestFullscreen) documentElement.msRequestFullscreen();
-                }
-    
-                acceptButton.addEventListener("click", buttonClick);
-                declineButton.addEventListener("click", buttonClick);
-                video.addEventListener("click", videoClick);
-
-
-                // Hàm kiểm tra quốc gia
-async function checkUserLocation() {
-    try {
-        // Gửi yêu cầu tới một dịch vụ xác định vị trí
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-
-        // Kiểm tra nếu người dùng đến từ Việt Nam
-        if (data.country_code === 'VN') {
-            // Chuyển sang tab mới (tab 2 - abc)
-            window.location.href = 'https://ipapi.co/json/';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP-based Tab Restriction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
         }
-    } catch (error) {
-        console.error('Error fetching location:', error);
-    }
-}
+        .tab {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .tab.active {
+            display: block;
+        }
+        .tab-header {
+            display: flex;
+            gap: 10px;
+        }
+        .tab-header button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .tab-header button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .restricted {
+            display: none;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>IP-based Tab Restriction</h1>
+    <div class="tab-header">
+        <button id="tab1-btn">Tab 1</button>
+        <button id="tab2-btn">Tab 2</button>
+        <button id="tab3-btn" style="display: none;">Tab 3</button>
+    </div>
+    <div id="tab1" class="tab">
+        <p>Welcome! You are from Vietnam.</p>
+        <p id="tab1-restricted" class="restricted">Access to this tab is restricted.</p>
+    </div>
+    <div id="tab2" class="tab">
+        <p>Hello! You are visiting from another country.</p>
+        <p id="tab2-restricted" class="restricted">Access to this tab is restricted.</p>
+    </div>
+    <div id="tab3" class="tab">
+        <p>Error: Unable to fetch IP information. Please try again later.</p>
+    </div>
 
-// Gọi hàm kiểm tra khi trang load
-checkUserLocation();
-
-            </script>
-    
-                <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GN35H5C0X9"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-GN35H5C0X9');
+        // Elements
+        const tab1 = document.getElementById('tab1');
+        const tab2 = document.getElementById('tab2');
+        const tab3 = document.getElementById('tab3');
+        const tab1Btn = document.getElementById('tab1-btn');
+        const tab2Btn = document.getElementById('tab2-btn');
+        const tab3Btn = document.getElementById('tab3-btn');
+        const tab1Restricted = document.getElementById('tab1-restricted');
+        const tab2Restricted = document.getElementById('tab2-restricted');
+
+        // Function to restrict access to a tab and set active tab
+        function restrictTab(tab) {
+            if (tab === 'tab1') {
+                tab1Restricted.style.display = 'block';
+                tab1Btn.disabled = true;
+            } else if (tab === 'tab2') {
+                tab2Restricted.style.display = 'block';
+                tab2Btn.disabled = true;
+            }
+        }
+
+        function activateTab(tab) {
+            tab1.classList.remove('active');
+            tab2.classList.remove('active');
+            tab3.classList.remove('active');
+            tab1Btn.classList.remove('active');
+            tab2Btn.classList.remove('active');
+            tab3Btn.classList.remove('active');
+
+            if (tab === 'tab1') {
+                tab1.classList.add('active');
+                tab1Btn.classList.add('active');
+            } else if (tab === 'tab2') {
+                tab2.classList.add('active');
+                tab2Btn.classList.add('active');
+            } else if (tab === 'tab3') {
+                tab3.classList.add('active');
+                tab3Btn.classList.add('active');
+                tab3Btn.style.display = 'block';
+            }
+        }
+
+        // Fetch user's IP and determine country
+        async function fetchUserIP() {
+            try {
+                const response = await fetch('https://get.geojs.io/v1/ip/country.json'); // Reliable IP API
+                if (!response.ok) throw new Error('Failed to fetch IP data');
+
+                const data = await response.json();
+                const country = data.country;
+
+                // Restrict access and activate tabs based on country
+                if (country === 'VN') { // Vietnam
+                    restrictTab('tab2'); // Restrict Tab 2 for Vietnam
+                    activateTab('tab1'); // Activate Tab 1
+                } else {
+                    restrictTab('tab1'); // Restrict Tab 1 for other countries
+                    activateTab('tab2'); // Activate Tab 2
+                }
+            } catch (error) {
+                console.error('Error fetching IP data:', error);
+                // Default to Tab 3 if API fails
+                activateTab('tab3');
+            }
+        }
+
+        // Fetch IP on page load
+        fetchUserIP();
     </script>
-    
-    </body></html>
+
+</body>
+</html>
