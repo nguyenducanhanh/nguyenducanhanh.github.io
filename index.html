@@ -35,6 +35,7 @@
             margin: 5px;
             border-radius: 10px;
             max-width: 70%;
+            position: relative;
         }
         .sent {
             background-color: #007bff;
@@ -74,6 +75,28 @@
             background: white;
             text-align: center;
         }
+        /* Menu tùy chọn */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 100;
+        }
+        .context-menu button {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+        }
+        .context-menu button:hover {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -92,27 +115,72 @@
             <button onclick="sendMessage()">Gửi</button>
         </div>
     </div>
+
+    <!-- Menu tùy chọn khi nhấn giữ -->
+    <div class="context-menu" id="context-menu">
+        <button onclick="deleteMessage()">Xóa</button>
+        <button onclick="revokeMessage()">Thu hồi</button>
+    </div>
+
     <script>
+        let selectedMessage = null; // Lưu tin nhắn đang chọn
+
         function sendMessage() {
             let input = document.getElementById("message-input");
             let messageText = input.value.trim();
             if (messageText === "") return;
-            
+
             let selectedUser = document.querySelector('input[name="user"]:checked').value;
             let chatBox = document.getElementById("chat-box");
             let message = document.createElement("div");
-            
+
             if (selectedUser === "A") {
                 message.classList.add("message", "sent");
             } else {
                 message.classList.add("message", "received");
             }
-            
+
             message.textContent = messageText;
+            message.addEventListener("touchstart", (e) => showContextMenu(e, message));
+            message.addEventListener("contextmenu", (e) => showContextMenu(e, message));
+
             chatBox.appendChild(message);
-            
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showContextMenu(event, message) {
+            event.preventDefault(); // Ngăn chặn menu chuột phải mặc định trên trình duyệt
+
+            selectedMessage = message;
+            let menu = document.getElementById("context-menu");
+
+            menu.style.left = `${event.touches ? event.touches[0].clientX : event.clientX}px`;
+            menu.style.top = `${event.touches ? event.touches[0].clientY : event.clientY}px`;
+            menu.style.display = "block";
+
+            document.addEventListener("click", hideContextMenu);
+        }
+
+        function hideContextMenu() {
+            document.getElementById("context-menu").style.display = "none";
+            document.removeEventListener("click", hideContextMenu);
+        }
+
+        function deleteMessage() {
+            if (selectedMessage) {
+                selectedMessage.remove();
+            }
+            hideContextMenu();
+        }
+
+        function revokeMessage() {
+            if (selectedMessage) {
+                selectedMessage.textContent = "Tin nhắn đã bị thu hồi";
+                selectedMessage.style.fontStyle = "italic";
+                selectedMessage.style.color = "#888";
+            }
+            hideContextMenu();
         }
     </script>
 </body>
