@@ -3,81 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Explorer</title>
+    <title>Chat Messenger</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #1c1c1c;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #ffcc00;
-        }
-        #searchBox {
-            padding: 10px;
-            width: 300px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        .show-container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
-        .show {
-            width: 200px;
-            margin: 15px;
-            background: #333;
-            padding: 10px;
+        .chat-container {
+            width: 350px;
+            height: 500px;
+            background: white;
+            display: flex;
+            flex-direction: column;
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-        .show img {
-            width: 100%;
+        .chat-box {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+        .sent {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+        .received {
+            background-color: #e5e5ea;
+            color: black;
+            align-self: flex-start;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            outline: none;
+        }
+        .input-container button {
+            margin-left: 5px;
+            padding: 8px 12px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Movie Explorer</h1>
-    <input type="text" id="searchBox" placeholder="Enter movie name..." onkeyup="searchShow()">
-    <div class="show-container" id="showContainer"></div>
-    
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Nhập tin nhắn...">
+            <button onclick="sendMessage()">Gửi</button>
+        </div>
+    </div>
     <script>
-        const showContainer = document.getElementById("showContainer");
-        
-        function fetchShows(url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    showContainer.innerHTML = "";
-                    data.forEach(item => {
-                        const show = item.show;
-                        const showElement = document.createElement("div");
-                        showElement.classList.add("show");
-                        showElement.innerHTML = `
-                            <img src="${show.image ? show.image.medium : 'https://via.placeholder.com/200'}" alt="${show.name}">
-                            <h3>${show.name}</h3>
-                            <p>⭐ ${show.rating.average || 'N/A'}</p>
-                        `;
-                        showContainer.appendChild(showElement);
-                    });
-                });
+        let isSender = true;
+
+        function sendMessage() {
+            let input = document.getElementById("message-input");
+            let messageText = input.value.trim();
+            if (messageText === "") return;
+            
+            let chatBox = document.getElementById("chat-box");
+            let message = document.createElement("div");
+            message.classList.add("message", isSender ? "sent" : "received");
+            message.textContent = messageText;
+            chatBox.appendChild(message);
+            
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            isSender = !isSender;
         }
-        
-        function searchShow() {
-            const query = document.getElementById("searchBox").value;
-            if (query.length > 2) {
-                fetchShows(`https://api.tvmaze.com/search/shows?q=${query}`);
-            } else {
-                fetchShows(`https://api.tvmaze.com/shows`);
-            }
-        }
-        
-        // Fetch popular shows initially
-        fetchShows(`https://api.tvmaze.com/shows`);
     </script>
 </body>
 </html>
