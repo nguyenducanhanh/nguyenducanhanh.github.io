@@ -68,10 +68,24 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .user-selector {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="chat-container">
+        <div class="user-selector">
+            <label>
+                <input type="radio" name="user" value="A" checked> Người A
+            </label>
+            <label>
+                <input type="radio" name="user" value="B"> Người B
+            </label>
+        </div>
         <div class="chat-box" id="chat-box"></div>
         <div class="input-container">
             <input type="text" id="message-input" placeholder="Nhập tin nhắn...">
@@ -79,23 +93,26 @@
         </div>
     </div>
     <script>
-        let isSender = true;
-
         function sendMessage() {
             let input = document.getElementById("message-input");
             let messageText = input.value.trim();
             if (messageText === "") return;
             
+            let selectedUser = document.querySelector('input[name="user"]:checked').value;
             let chatBox = document.getElementById("chat-box");
             let message = document.createElement("div");
-            message.classList.add("message", isSender ? "sent" : "received");
+            
+            if (selectedUser === "A") {
+                message.classList.add("message", "sent");
+            } else {
+                message.classList.add("message", "received");
+            }
+            
             message.textContent = messageText;
             chatBox.appendChild(message);
             
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
-            
-            isSender = !isSender;
         }
     </script>
 </body>
