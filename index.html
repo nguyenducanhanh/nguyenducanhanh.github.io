@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Messenger</title>
+    <title>Chat Messenger - AI MỎ HỖN</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,6 +12,7 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            margin: 0;
         }
         .chat-container {
             width: 350px;
@@ -23,19 +24,29 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
+        .chat-header {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
         .chat-box {
             flex: 1;
             padding: 10px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            background: #fafafa;
         }
         .message {
-            padding: 8px 12px;
+            padding: 10px;
             margin: 5px;
-            border-radius: 10px;
+            border-radius: 15px;
             max-width: 70%;
             position: relative;
+            font-size: 14px;
         }
         .sent {
             background-color: #007bff;
@@ -55,27 +66,29 @@
         }
         .input-container input {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             outline: none;
+            font-size: 14px;
         }
         .input-container button {
             margin-left: 5px;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: none;
             background: #007bff;
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
         }
         .user-selector {
             padding: 10px;
             border-bottom: 1px solid #ddd;
             background: white;
             text-align: center;
+            font-size: 14px;
         }
-        /* Menu tùy chọn */
         .context-menu {
             position: absolute;
             background: white;
@@ -88,11 +101,12 @@
         .context-menu button {
             display: block;
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: none;
             background: white;
             cursor: pointer;
             text-align: left;
+            font-size: 14px;
         }
         .context-menu button:hover {
             background: #f0f0f0;
@@ -101,6 +115,7 @@
 </head>
 <body>
     <div class="chat-container">
+       
         <div class="user-selector">
             <label>
                 <input type="radio" name="user" value="A" checked> Người A
@@ -109,6 +124,10 @@
                 <input type="radio" name="user" value="B"> Người B
             </label>
         </div>
+        <div class="chat-header"> Memes AI  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+          <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+          <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+        </svg> </div>
         <div class="chat-box" id="chat-box"></div>
         <div class="input-container">
             <input type="text" id="message-input" placeholder="Nhập tin nhắn...">
@@ -116,14 +135,13 @@
         </div>
     </div>
 
-    <!-- Menu tùy chọn khi nhấn giữ -->
     <div class="context-menu" id="context-menu">
         <button onclick="deleteMessage()">Xóa</button>
         <button onclick="revokeMessage()">Thu hồi</button>
     </div>
 
     <script>
-        let selectedMessage = null; // Lưu tin nhắn đang chọn
+        let selectedMessage = null;
 
         function sendMessage() {
             let input = document.getElementById("message-input");
@@ -141,24 +159,19 @@
             }
 
             message.textContent = messageText;
-            message.addEventListener("touchstart", (e) => showContextMenu(e, message));
             message.addEventListener("contextmenu", (e) => showContextMenu(e, message));
-
             chatBox.appendChild(message);
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function showContextMenu(event, message) {
-            event.preventDefault(); // Ngăn chặn menu chuột phải mặc định trên trình duyệt
-
+            event.preventDefault();
             selectedMessage = message;
             let menu = document.getElementById("context-menu");
-
-            menu.style.left = `${event.touches ? event.touches[0].clientX : event.clientX}px`;
-            menu.style.top = `${event.touches ? event.touches[0].clientY : event.clientY}px`;
+            menu.style.left = `${event.clientX}px`;
+            menu.style.top = `${event.clientY}px`;
             menu.style.display = "block";
-
             document.addEventListener("click", hideContextMenu);
         }
 
